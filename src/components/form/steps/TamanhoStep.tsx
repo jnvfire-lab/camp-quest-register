@@ -40,8 +40,8 @@ export const TamanhoStep = ({
 
   return (
     <QuestionCard
-      title="Tamanho da Camiseta"
-      description="Escolha o tamanho ideal para receber sua camiseta do acampamento"
+      title="Qual é o seu tamanho de camiseta?"
+      description="Selecione o tamanho que melhor se adapta a você"
       onNext={handleNext}
       onPrevious={onPrevious}
       nextDisabled={!canProceed}
@@ -54,9 +54,6 @@ export const TamanhoStep = ({
           className="text-center p-4 rounded-xl bg-accent/20"
         >
           <div className="text-4xl mb-2">👕</div>
-          <p className="text-sm text-muted-foreground">
-            Selecione o tamanho que melhor se adapta a você
-          </p>
         </motion.div>
 
         <motion.div
@@ -79,11 +76,10 @@ export const TamanhoStep = ({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="p-4 rounded-xl bg-success/10 border border-success/20"
+            className="p-4 rounded-xl bg-accent/30 border border-accent"
           >
-            <p className="text-sm text-success-foreground">
-              ✅ Tamanho <strong>{localData.tamanho}</strong> selecionado! 
-              Sua camiseta estará esperando por você no acampamento.
+            <p className="text-sm text-accent-foreground">
+              ✅ Tamanho <strong>{localData.tamanho}</strong> selecionado!
             </p>
           </motion.div>
         )}

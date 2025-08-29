@@ -50,7 +50,7 @@ export const MultiStepForm = () => {
       autorizacao: false,
       tamanho: '',
       formaPagamento: '',
-      valor: 0,
+      valor: 250,
       parcelas: '1x',
       observacoes: ''
     }
@@ -229,7 +229,7 @@ export const MultiStepForm = () => {
     });
     setValue('menor', false);
     setValue('autorizacao', false);
-    setValue('valor', 0);
+    setValue('valor', 250);
     setValue('parcelas', '1x');
   };
 
@@ -244,7 +244,8 @@ export const MultiStepForm = () => {
     <div className="w-full max-w-4xl mx-auto p-4">
       <ProgressBar 
         currentStep={currentStep + 1} 
-        totalSteps={STEPS.length} 
+        totalSteps={STEPS.length}
+        currentStepName={STEPS[currentStep]}
       />
 
       <AnimatePresence mode="wait">

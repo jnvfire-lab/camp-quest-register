@@ -1,8 +1,10 @@
 // Configurações do evento
 export const EVENT_CONFIG = {
-  title: 'Acampamento de Jovens',
-  dates: '17, 18 e 19 de outubro',
-  city: 'Sua cidade/UF'
+  title: 'Fire Camp 2025',
+  subtitle: 'Dias para queimar por Jesus, crescer em unidade e viver algo novo.',
+  location: 'Rua Jabuticabeira, 385, Jaguariúna — Recanto Ebenézer — Manancial de Bençãos',
+  ageLimit: 'A partir de 11 anos',
+  paymentDeadline: '12/10/2025'
 };
 
 // Opções para seleções
@@ -20,7 +22,7 @@ export const TAMANHOS_CAMISETA = [
 
 export const FORMAS_PAGAMENTO = [
   { value: 'pix', label: 'Pix' },
-  { value: 'cartao', label: 'Cartão (falar com organização)' },
+  { value: 'cartao', label: 'Cartão — falar com organização' },
   { value: 'dinheiro', label: 'Dinheiro no dia' }
 ];
 
@@ -69,11 +71,30 @@ export const FORM_STEPS = [
 // Máscara para telefone brasileiro
 export const PHONE_MASK = '(99) 99999-9999';
 
-// Contatos WhatsApp (exemplo)
+// Contatos WhatsApp Fire Camp 2025
 export const WHATSAPP_CONTACTS = {
-  maicon: '5511999999999',
-  gabi: '5511888888888'
+  maicon: '5519992467395',
+  gabi: '5519986046866'
 };
 
-// Chave PIX (exemplo)
-export const PIX_KEY = 'acampamento@exemplo.com';
+// Dados PIX Fire Camp 2025
+export const PIX_DATA = {
+  key: 'jnvfire@gmail.com',
+  name: 'Maicon Romano',
+  bank: 'Will'
+};
+
+// Valor do evento
+export const EVENT_VALUE = 250;
+
+// Versículos
+export const BIBLE_VERSES = [
+  {
+    reference: '1Tm 4:12',
+    text: 'Ninguém o despreze por você ser jovem…'
+  },
+  {
+    reference: 'Sl 133:1',
+    text: 'Oh! Como é bom e agradável viverem unidos os irmãos!'
+  }
+];

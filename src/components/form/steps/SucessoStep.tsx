@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Copy, MessageCircle, ExternalLink } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { EVENT_CONFIG, WHATSAPP_CONTACTS, PIX_KEY } from '@/lib/constants';
+import { EVENT_CONFIG, WHATSAPP_CONTACTS, PIX_DATA } from '@/lib/constants';
 
 interface SucessoStepProps {
   onRestart: () => void;
@@ -30,7 +30,7 @@ export const SucessoStep = ({ onRestart }: SucessoStepProps) => {
   };
 
   const openWhatsApp = (phone: string, name: string) => {
-    const message = `Olá! Acabei de me inscrever no ${EVENT_CONFIG.title} (${EVENT_CONFIG.dates}). Gostaria de tirar algumas dúvidas.`;
+    const message = `Olá! Acabei de me inscrever no ${EVENT_CONFIG.title}. Gostaria de tirar algumas dúvidas.`;
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
   };
@@ -97,10 +97,10 @@ export const SucessoStep = ({ onRestart }: SucessoStepProps) => {
             </h3>
             <div className="bg-background rounded-lg p-4 mb-4">
               <p className="text-sm text-muted-foreground mb-2">Chave Pix:</p>
-              <p className="font-mono text-foreground break-all">{PIX_KEY}</p>
+              <p className="font-mono text-foreground break-all">{PIX_DATA.key}</p>
             </div>
             <Button
-              onClick={() => copyToClipboard(PIX_KEY, 'Chave Pix')}
+              onClick={() => copyToClipboard(PIX_DATA.key, 'Chave Pix')}
               variant="outline"
               className="w-full"
             >

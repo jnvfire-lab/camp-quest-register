@@ -21,9 +21,14 @@ const participanteSchema = z.object({
     .refine((date) => {
       const parsed = new Date(date);
       const now = new Date();
-      const age = now.getFullYear() - parsed.getFullYear();
-      return age >= 10 && age <= 30;
-    }, 'Participante deve ter entre 10 e 30 anos'),
+      let age = now.getFullYear() - parsed.getFullYear();
+      const monthDiff = now.getMonth() - parsed.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < parsed.getDate())) {
+        age--;
+      }
+      if (age < 11) return false;
+      return age >= 11 && age <= 30;
+    }, 'Inscrições apenas a partir de 11 anos'),
   
   menor: z.boolean()
 });
@@ -49,8 +54,8 @@ const dadosSchema = z.object({
     .min(1, 'Forma de pagamento é obrigatória'),
   
   valor: z.number()
-    .min(1, 'Valor deve ser maior que zero')
-    .max(1000, 'Valor máximo de R$ 1.000'),
+    .min(250, 'Valor deve ser R$ 250,00')
+    .max(250, 'Valor deve ser R$ 250,00'),
   
   parcelas: z.string().optional(),
   

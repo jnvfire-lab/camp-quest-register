@@ -86,7 +86,6 @@ export const ObservacoesStep = ({
             <h4 className="font-medium text-success-foreground mb-2">✅ Incluir se tiver:</h4>
             <ul className="text-xs text-success-foreground/80 space-y-1">
               <li>• Alergias alimentares</li>
-              <li>• Restrições religiosas</li>
               <li>• Necessidades especiais</li>
               <li>• Medicamentos importantes</li>
             </ul>

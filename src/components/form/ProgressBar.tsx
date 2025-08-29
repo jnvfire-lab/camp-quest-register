@@ -4,9 +4,10 @@ import { FORM_STEPS } from '@/lib/constants';
 interface ProgressBarProps {
   currentStep: number;
   totalSteps: number;
+  currentStepName?: string;
 }
 
-export const ProgressBar = ({ currentStep, totalSteps }: ProgressBarProps) => {
+export const ProgressBar = ({ currentStep, totalSteps, currentStepName }: ProgressBarProps) => {
   const progress = (currentStep / totalSteps) * 100;
 
   return (
