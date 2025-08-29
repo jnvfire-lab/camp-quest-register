@@ -1,14 +1,21 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { QuestionCard } from '../QuestionCard';
-import { RadioGroupInput } from '../inputs/RadioGroup';
-import { SelectInput } from '../inputs/SelectInput';
-import { TextInput } from '../inputs/TextInput';
-import { Button } from '@/components/ui/button';
-import { Copy, MessageCircle } from 'lucide-react';
-import { FormData } from '@/lib/validation';
-import { FORMAS_PAGAMENTO, OPCOES_PARCELAS, WHATSAPP_CONTACTS, PIX_DATA, EVENT_VALUE, EVENT_CONFIG } from '@/lib/constants';
-import { useToast } from '@/hooks/use-toast';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { QuestionCard } from "../QuestionCard";
+import { RadioGroupInput } from "../inputs/RadioGroup";
+import { SelectInput } from "../inputs/SelectInput";
+import { TextInput } from "../inputs/TextInput";
+import { Button } from "@/components/ui/button";
+import { Copy, MessageCircle } from "lucide-react";
+import { FormData } from "@/lib/validation";
+import {
+  FORMAS_PAGAMENTO,
+  OPCOES_PARCELAS,
+  WHATSAPP_CONTACTS,
+  PIX_DATA,
+  EVENT_VALUE,
+  EVENT_CONFIG,
+} from "@/lib/constants";
+import { useToast } from "@/hooks/use-toast";
 
 interface PagamentoStepProps {
   data: Partial<FormData>;
@@ -23,13 +30,13 @@ export const PagamentoStep = ({
   onChange,
   onNext,
   onPrevious,
-  errors
+  errors,
 }: PagamentoStepProps) => {
   const { toast } = useToast();
   const [localData, setLocalData] = useState({
-    formaPagamento: data.formaPagamento || '',
+    formaPagamento: data.formaPagamento || "",
     valor: EVENT_VALUE,
-    parcelas: data.parcelas || '1x'
+    parcelas: data.parcelas || "1x",
   });
 
   const handleChange = (field: string, value: any) => {
@@ -39,21 +46,20 @@ export const PagamentoStep = ({
   };
 
   const handleNext = () => {
-    const hasAllRequired = 
-      localData.formaPagamento && 
-      localData.valor === EVENT_VALUE;
+    const hasAllRequired =
+      localData.formaPagamento && localData.valor === EVENT_VALUE;
 
     if (hasAllRequired && !Object.keys(errors).length) {
       onNext();
     }
   };
 
-  const canProceed = 
-    localData.formaPagamento && 
+  const canProceed =
+    localData.formaPagamento &&
     localData.valor === EVENT_VALUE &&
     !Object.keys(errors).length;
 
-  const showParcelas = localData.formaPagamento === 'cartao';
+  const showParcelas = localData.formaPagamento === "cartao";
 
   const copyPixKey = async () => {
     try {
@@ -73,10 +79,12 @@ export const PagamentoStep = ({
     }
   };
 
-  const openWhatsApp = (contact: 'maicon' | 'gabi') => {
+  const openWhatsApp = (contact: "maicon" | "gabi") => {
     const number = WHATSAPP_CONTACTS[contact];
-    const message = encodeURIComponent('Olá! Gostaria de pagar a inscrição do Fire Camp 2025 no cartão.');
-    window.open(`https://wa.me/${number}?text=${message}`, '_blank');
+    const message = encodeURIComponent(
+      "Olá! Gostaria de pagar a inscrição do Fire Camp 2025 no cartão."
+    );
+    window.open(`https://wa.me/${number}?text=${message}`, "_blank");
   };
 
   return (
@@ -96,7 +104,8 @@ export const PagamentoStep = ({
           className="p-4 rounded-xl bg-warning/10 border border-warning/20"
         >
           <p className="text-sm text-warning-foreground font-medium">
-            ⏰ <strong>Prazo limite:</strong> Pagamento até {EVENT_CONFIG.paymentDeadline}
+            ⏰ <strong>Prazo limite:</strong> Pagamento até{" "}
+            {EVENT_CONFIG.paymentDeadline}
           </p>
         </motion.div>
 
@@ -108,7 +117,7 @@ export const PagamentoStep = ({
           <RadioGroupInput
             label="Forma de pagamento"
             value={localData.formaPagamento}
-            onChange={(value) => handleChange('formaPagamento', value)}
+            onChange={(value) => handleChange("formaPagamento", value)}
             options={FORMAS_PAGAMENTO}
             error={errors.formaPagamento}
             required
@@ -141,7 +150,7 @@ export const PagamentoStep = ({
             <SelectInput
               label="Número de parcelas"
               value={localData.parcelas}
-              onChange={(value) => handleChange('parcelas', value)}
+              onChange={(value) => handleChange("parcelas", value)}
               options={OPCOES_PARCELAS}
               placeholder="Selecione o parcelamento"
             />
@@ -151,7 +160,7 @@ export const PagamentoStep = ({
           </motion.div>
         )}
 
-        {localData.formaPagamento === 'pix' && (
+        {localData.formaPagamento === "pix" && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -159,13 +168,21 @@ export const PagamentoStep = ({
             className="space-y-4"
           >
             <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
-              <h4 className="font-semibold text-primary-foreground mb-3">💰 Dados para Pix</h4>
+              <h4 className="font-semibold text-primary mb-3">
+                💰 Dados para Pix
+              </h4>
               <div className="space-y-2 text-sm">
-                <p><strong>Chave:</strong> {PIX_DATA.key}</p>
-                <p><strong>Nome:</strong> {PIX_DATA.name}</p>
-                <p><strong>Banco:</strong> {PIX_DATA.bank}</p>
+                <p>
+                  <strong>Chave:</strong> {PIX_DATA.key}
+                </p>
+                <p>
+                  <strong>Nome:</strong> {PIX_DATA.name}
+                </p>
+                <p>
+                  <strong>Banco:</strong> {PIX_DATA.bank}
+                </p>
               </div>
-              
+
               <Button
                 onClick={copyPixKey}
                 variant="outline"
@@ -177,11 +194,13 @@ export const PagamentoStep = ({
               </Button>
             </div>
 
-            {/* Placeholder para QR Code */}
+            {/* QR Code real (coloque sua imagem em public/pix-qr.png) */}
             <div className="text-center p-6 rounded-xl bg-muted/50 border border-border">
-              <div className="w-48 h-48 mx-auto bg-muted rounded-lg flex items-center justify-center mb-3">
-                <p className="text-muted-foreground text-sm">QR Code do Pix</p>
-              </div>
+              <img
+                src="/pix-qr.png"
+                alt="QR Code Pix"
+                className="w-48 h-48 mx-auto rounded-lg border border-border object-contain mb-3"
+              />
               <p className="text-sm text-muted-foreground">
                 Escaneie o QR Code ou use a chave Pix acima
               </p>
@@ -189,13 +208,14 @@ export const PagamentoStep = ({
 
             <div className="p-4 rounded-xl bg-accent/30 border border-accent">
               <p className="text-sm text-accent-foreground">
-                📲 <strong>Após o pagamento:</strong> Envie o comprovante para Maicon ou Gabi no WhatsApp.
+                📲 <strong>Após o pagamento:</strong> Envie o comprovante para
+                Maicon ou Gabi no WhatsApp.
               </p>
             </div>
           </motion.div>
         )}
 
-        {localData.formaPagamento === 'cartao' && (
+        {localData.formaPagamento === "cartao" && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -203,18 +223,20 @@ export const PagamentoStep = ({
             className="space-y-4"
           >
             <div className="p-4 rounded-xl bg-secondary/10 border border-secondary/20">
-              <p className="text-sm text-secondary-foreground mb-4">
-                💳 <strong>Pagamento no cartão:</strong> Entre em contato com a organização para receber o link de pagamento.
+              <p className="text-sm text-dark mb-4">
+                💳 <strong>Pagamento no cartão:</strong> Entre em contato com a
+                organização para receber o link de pagamento.
                 {showParcelas && localData.parcelas && (
                   <span className="block mt-2">
-                    Parcelamento: <strong>{localData.parcelas}</strong> (sujeito a juros)
+                    Parcelamento: <strong>{localData.parcelas}</strong> (sujeito
+                    a juros)
                   </span>
                 )}
               </p>
 
               <div className="grid grid-cols-2 gap-3">
                 <Button
-                  onClick={() => openWhatsApp('maicon')}
+                  onClick={() => openWhatsApp("maicon")}
                   variant="outline"
                   size="sm"
                   className="flex items-center gap-2 focus-primary"
@@ -223,7 +245,7 @@ export const PagamentoStep = ({
                   WhatsApp Maicon
                 </Button>
                 <Button
-                  onClick={() => openWhatsApp('gabi')}
+                  onClick={() => openWhatsApp("gabi")}
                   variant="outline"
                   size="sm"
                   className="flex items-center gap-2 focus-primary"
@@ -236,7 +258,7 @@ export const PagamentoStep = ({
           </motion.div>
         )}
 
-        {localData.formaPagamento === 'dinheiro' && (
+        {localData.formaPagamento === "dinheiro" && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -244,8 +266,9 @@ export const PagamentoStep = ({
             className="p-4 rounded-xl bg-accent/30 border border-accent"
           >
             <p className="text-sm text-accent-foreground">
-              💵 <strong>Pagamento em dinheiro:</strong> Leve o valor exato (R$ {EVENT_VALUE},00) no dia do evento. 
-              Confirme sua presença com antecedência!
+              💵 <strong>Pagamento em dinheiro:</strong> Leve o valor exato (R${" "}
+              {EVENT_VALUE},00) no dia do evento. Confirme sua presença com
+              antecedência!
             </p>
           </motion.div>
         )}

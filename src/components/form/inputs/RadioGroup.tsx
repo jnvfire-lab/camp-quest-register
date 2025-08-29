@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { motion } from "framer-motion";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 interface Option {
   value: string;
@@ -23,7 +23,7 @@ export const RadioGroupInput = ({
   onChange,
   options,
   error,
-  required = false
+  required = false,
 }: RadioGroupInputProps) => {
   return (
     <motion.div
@@ -35,7 +35,7 @@ export const RadioGroupInput = ({
         {label}
         {required && <span className="text-destructive ml-1">*</span>}
       </Label>
-      
+
       <RadioGroup
         value={value}
         onValueChange={onChange}
@@ -44,6 +44,7 @@ export const RadioGroupInput = ({
       >
         {options.map((option, index) => (
           <motion.div
+            onClick={() => onChange(option.value)}
             key={option.value}
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
@@ -51,9 +52,10 @@ export const RadioGroupInput = ({
             className={`
               flex items-start space-x-3 p-4 rounded-xl border border-border
               hover:border-primary/50 transition-smooth cursor-pointer
-              ${value === option.value 
-                ? 'border-primary bg-accent/50' 
-                : 'hover:bg-accent/20'
+              ${
+                value === option.value
+                  ? "border-primary bg-accent/50"
+                  : "hover:bg-accent/20"
               }
             `}
           >
@@ -78,11 +80,11 @@ export const RadioGroupInput = ({
           </motion.div>
         ))}
       </RadioGroup>
-      
+
       {error && (
         <motion.p
           initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
+          animate={{ opacity: 1, height: "auto" }}
           className="text-xs text-destructive"
         >
           {error}

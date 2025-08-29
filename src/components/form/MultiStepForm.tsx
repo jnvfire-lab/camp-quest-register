@@ -1,26 +1,32 @@
-import { useState, useEffect } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { formSchema, FormData, validateStep } from '@/lib/validation';
-import { saveFormData, loadFormData, saveCurrentStep, loadCurrentStep, clearFormData } from '@/lib/storage';
-import { getDataAdapter } from '@/lib/data/adapter';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { formSchema, FormData, validateStep } from "@/lib/validation";
+import {
+  saveFormData,
+  loadFormData,
+  saveCurrentStep,
+  loadCurrentStep,
+  clearFormData,
+} from "@/lib/storage";
+import { getDataAdapter } from "@/lib/data/adapter";
+import { useToast } from "@/hooks/use-toast";
 
-import { ProgressBar } from './ProgressBar';
-import { ParticipanteStep } from './steps/ParticipanteStep';
-import { ResponsavelStep } from './steps/ResponsavelStep';
-import { TamanhoStep } from './steps/TamanhoStep';
-import { PagamentoStep } from './steps/PagamentoStep';
-import { ObservacoesStep } from './steps/ObservacoesStep';
-import { SucessoStep } from './steps/SucessoStep';
+import { ProgressBar } from "./ProgressBar";
+import { ParticipanteStep } from "./steps/ParticipanteStep";
+import { ResponsavelStep } from "./steps/ResponsavelStep";
+import { TamanhoStep } from "./steps/TamanhoStep";
+import { PagamentoStep } from "./steps/PagamentoStep";
+import { ObservacoesStep } from "./steps/ObservacoesStep";
+import { SucessoStep } from "./steps/SucessoStep";
 
 const STEPS = [
-  'participante',
-  'responsavel', 
-  'tamanho',
-  'pagamento',
-  'observacoes'
+  "participante",
+  "responsavel",
+  "tamanho",
+  "pagamento",
+  "observacoes",
 ];
 
 export const MultiStepForm = () => {
@@ -35,25 +41,25 @@ export const MultiStepForm = () => {
     setValue,
     getValues,
     trigger,
-    formState: { errors }
+    formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
-    mode: 'onChange',
+    mode: "onChange",
     defaultValues: {
-      nome: '',
-      email: '',
-      telefone: '',
-      nascimento: '',
+      nome: "",
+      email: "",
+      telefone: "",
+      nascimento: "",
       menor: false,
-      responsavelNome: '',
-      responsavelTelefone: '',
+      responsavelNome: "",
+      responsavelTelefone: "",
       autorizacao: false,
-      tamanho: '',
-      formaPagamento: '',
+      tamanho: "",
+      formaPagamento: "",
       valor: 250,
-      parcelas: '1x',
-      observacoes: ''
-    }
+      parcelas: "1x",
+      observacoes: "",
+    },
   });
 
   const data = watch();
@@ -62,12 +68,12 @@ export const MultiStepForm = () => {
   useEffect(() => {
     const savedData = loadFormData();
     const savedStep = loadCurrentStep();
-    
+
     if (Object.keys(savedData).length > 0) {
       Object.entries(savedData).forEach(([key, value]) => {
         setValue(key as keyof FormData, value);
       });
-      
+
       if (savedStep && STEPS.includes(savedStep)) {
         setCurrentStep(STEPS.indexOf(savedStep));
         toast({
@@ -93,26 +99,26 @@ export const MultiStepForm = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isSuccess) return;
-      
+
       // Prevent default behavior for form navigation keys
-      if (e.key === 'Enter' && !e.shiftKey && !isTextarea(e.target)) {
+      if (e.key === "Enter" && !e.shiftKey && !isTextarea(e.target)) {
         e.preventDefault();
         handleNext();
       }
-      
-      if (e.key === 'ArrowRight' && e.ctrlKey) {
+
+      if (e.key === "ArrowRight" && e.ctrlKey) {
         e.preventDefault();
         handleNext();
       }
-      
-      if (e.key === 'ArrowLeft' && e.ctrlKey) {
+
+      if (e.key === "ArrowLeft" && e.ctrlKey) {
         e.preventDefault();
         handlePrevious();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [currentStep, data, isSuccess]);
 
   const isTextarea = (target: EventTarget | null): boolean => {
@@ -122,10 +128,10 @@ export const MultiStepForm = () => {
   const validateCurrentStep = async () => {
     const stepKey = STEPS[currentStep];
     const result = validateStep(stepKey, data);
-    
+
     if (!result.success) {
       const newErrors: Record<string, string> = {};
-      if ('error' in result && result.error?.issues) {
+      if ("error" in result && result.error?.issues) {
         result.error.issues.forEach((issue) => {
           newErrors[issue.path[0]] = issue.message;
         });
@@ -133,28 +139,41 @@ export const MultiStepForm = () => {
       setStepErrors(newErrors);
       return false;
     }
-    
+
     setStepErrors({});
     return true;
   };
 
   const handleNext = async () => {
     if (isSubmitting) return;
-    
+
     const isValid = await validateCurrentStep();
     if (!isValid) return;
 
-    if (currentStep < STEPS.length - 1) {
-      setCurrentStep(prev => prev + 1);
+    // Skip 'responsavel' quando não necessário (idade >= 18)
+    const currentKey = STEPS[currentStep];
+    let nextIndex = currentStep + 1;
+    if (currentKey === "participante" && data.menor === false) {
+      const tamanhoIndex = STEPS.indexOf("tamanho");
+      if (tamanhoIndex !== -1) nextIndex = tamanhoIndex;
+    }
+    if (nextIndex < STEPS.length) {
+      setCurrentStep(nextIndex);
     } else {
       await handleSubmit();
     }
   };
 
   const handlePrevious = () => {
-    if (currentStep > 0) {
-      setCurrentStep(prev => prev - 1);
+    if (currentStep <= 0) return;
+    const currentKey = STEPS[currentStep];
+    let prevIndex = currentStep - 1;
+    // Se estamos em 'tamanho' e é >=18, voltar direto para 'participante'
+    if (currentKey === "tamanho" && data.menor === false) {
+      const participanteIndex = STEPS.indexOf("participante");
+      if (participanteIndex !== -1) prevIndex = participanteIndex;
     }
+    setCurrentStep(prevIndex);
   };
 
   const handleDataChange = (updates: Partial<FormData>) => {
@@ -165,12 +184,12 @@ export const MultiStepForm = () => {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    
+
     try {
       // Final validation
       const isValid = await trigger();
       if (!isValid) {
-        throw new Error('Dados inválidos');
+        throw new Error("Dados inválidos");
       }
 
       // Submit to adapter
@@ -188,11 +207,11 @@ export const MultiStepForm = () => {
         formaPagamento: data.formaPagamento,
         valor: data.valor,
         parcelas: data.parcelas,
-        observacoes: data.observacoes
+        observacoes: data.observacoes,
       };
 
       const result = await adapter.save(submission);
-      
+
       if (result.ok) {
         setIsSuccess(true);
         clearFormData();
@@ -202,10 +221,10 @@ export const MultiStepForm = () => {
           duration: 5000,
         });
       } else {
-        throw new Error('Falha ao enviar inscrição');
+        throw new Error("Falha ao enviar inscrição");
       }
     } catch (error) {
-      console.error('Submission error:', error);
+      console.error("Submission error:", error);
       toast({
         title: "Erro",
         description: "Não foi possível enviar a inscrição. Tente novamente.",
@@ -222,15 +241,15 @@ export const MultiStepForm = () => {
     setCurrentStep(0);
     setStepErrors({});
     clearFormData();
-    
+
     // Reset form
-    Object.keys(data).forEach(key => {
-      setValue(key as keyof FormData, '');
+    Object.keys(data).forEach((key) => {
+      setValue(key as keyof FormData, "");
     });
-    setValue('menor', false);
-    setValue('autorizacao', false);
-    setValue('valor', 250);
-    setValue('parcelas', '1x');
+    setValue("menor", false);
+    setValue("autorizacao", false);
+    setValue("valor", 250);
+    setValue("parcelas", "1x");
   };
 
   if (isSuccess) {
@@ -242,14 +261,14 @@ export const MultiStepForm = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto p-4">
-      <ProgressBar 
-        currentStep={currentStep + 1} 
+      <ProgressBar
+        currentStep={currentStep}
         totalSteps={STEPS.length}
         currentStepName={STEPS[currentStep]}
       />
 
       <AnimatePresence mode="wait">
-        {currentStepKey === 'participante' && (
+        {currentStepKey === "participante" && (
           <ParticipanteStep
             key="participante"
             data={data}
@@ -259,7 +278,7 @@ export const MultiStepForm = () => {
           />
         )}
 
-        {currentStepKey === 'responsavel' && (
+        {currentStepKey === "responsavel" && (
           <ResponsavelStep
             key="responsavel"
             data={data}
@@ -271,7 +290,7 @@ export const MultiStepForm = () => {
           />
         )}
 
-        {currentStepKey === 'tamanho' && (
+        {currentStepKey === "tamanho" && (
           <TamanhoStep
             key="tamanho"
             data={data}
@@ -282,7 +301,7 @@ export const MultiStepForm = () => {
           />
         )}
 
-        {currentStepKey === 'pagamento' && (
+        {currentStepKey === "pagamento" && (
           <PagamentoStep
             key="pagamento"
             data={data}
@@ -293,7 +312,7 @@ export const MultiStepForm = () => {
           />
         )}
 
-        {currentStepKey === 'observacoes' && (
+        {currentStepKey === "observacoes" && (
           <ObservacoesStep
             key="observacoes"
             data={data}

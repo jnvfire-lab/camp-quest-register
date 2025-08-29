@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { QuestionCard } from '../QuestionCard';
-import { RadioGroupInput } from '../inputs/RadioGroup';
-import { FormData } from '@/lib/validation';
-import { TAMANHOS_CAMISETA } from '@/lib/constants';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { QuestionCard } from "../QuestionCard";
+import { RadioGroupInput } from "../inputs/RadioGroup";
+import { FormData } from "@/lib/validation";
+import { TAMANHOS_CAMISETA } from "@/lib/constants";
 
 interface TamanhoStepProps {
   data: Partial<FormData>;
@@ -18,10 +18,10 @@ export const TamanhoStep = ({
   onChange,
   onNext,
   onPrevious,
-  errors
+  errors,
 }: TamanhoStepProps) => {
   const [localData, setLocalData] = useState({
-    tamanho: data.tamanho || ''
+    tamanho: data.tamanho || "",
   });
 
   const handleChange = (value: string) => {
@@ -76,9 +76,9 @@ export const TamanhoStep = ({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="p-4 rounded-xl bg-accent/30 border border-accent"
+            className="p-4 rounded-xl bg-success/10 border border-success/20"
           >
-            <p className="text-sm text-accent-foreground">
+            <p className="text-sm text-dark">
               ✅ Tamanho <strong>{localData.tamanho}</strong> selecionado!
             </p>
           </motion.div>

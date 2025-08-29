@@ -1,8 +1,8 @@
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Copy, MessageCircle, ExternalLink } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { EVENT_CONFIG, WHATSAPP_CONTACTS, PIX_DATA } from '@/lib/constants';
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Copy, MessageCircle, ExternalLink } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { EVENT_CONFIG, WHATSAPP_CONTACTS, PIX_DATA } from "@/lib/constants";
 
 interface SucessoStepProps {
   onRestart: () => void;
@@ -32,7 +32,7 @@ export const SucessoStep = ({ onRestart }: SucessoStepProps) => {
   const openWhatsApp = (phone: string, name: string) => {
     const message = `Olá! Acabei de me inscrever no ${EVENT_CONFIG.title}. Gostaria de tirar algumas dúvidas.`;
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
+    window.open(url, "_blank");
   };
 
   return (
@@ -78,7 +78,8 @@ export const SucessoStep = ({ onRestart }: SucessoStepProps) => {
           transition={{ delay: 0.4 }}
           className="text-muted-foreground mb-8"
         >
-          Sua inscrição para o <strong>{EVENT_CONFIG.title}</strong> foi enviada com sucesso!
+          Sua inscrição para o <strong>{EVENT_CONFIG.title}</strong> foi enviada
+          com sucesso!
           <br />
           Em breve você receberá mais informações sobre o evento.
         </motion.p>
@@ -92,15 +93,17 @@ export const SucessoStep = ({ onRestart }: SucessoStepProps) => {
         >
           {/* PIX Section */}
           <div className="p-6 rounded-xl bg-primary/10 border border-primary/20">
-            <h3 className="font-semibold text-primary-foreground/80 mb-4">
+            <h3 className="font-semibold text-primary mb-4">
               💰 Dados para Pagamento via Pix
             </h3>
             <div className="bg-background rounded-lg p-4 mb-4">
               <p className="text-sm text-muted-foreground mb-2">Chave Pix:</p>
-              <p className="font-mono text-foreground break-all">{PIX_DATA.key}</p>
+              <p className="font-mono text-foreground break-all">
+                {PIX_DATA.key}
+              </p>
             </div>
             <Button
-              onClick={() => copyToClipboard(PIX_DATA.key, 'Chave Pix')}
+              onClick={() => copyToClipboard(PIX_DATA.key, "Chave Pix")}
               variant="outline"
               className="w-full"
             >
@@ -116,7 +119,7 @@ export const SucessoStep = ({ onRestart }: SucessoStepProps) => {
                 📱 Falar com Maicon
               </h4>
               <Button
-                onClick={() => openWhatsApp(WHATSAPP_CONTACTS.maicon, 'Maicon')}
+                onClick={() => openWhatsApp(WHATSAPP_CONTACTS.maicon, "Maicon")}
                 variant="outline"
                 className="w-full"
               >
@@ -130,7 +133,7 @@ export const SucessoStep = ({ onRestart }: SucessoStepProps) => {
                 📱 Falar com Gabi
               </h4>
               <Button
-                onClick={() => openWhatsApp(WHATSAPP_CONTACTS.gabi, 'Gabi')}
+                onClick={() => openWhatsApp(WHATSAPP_CONTACTS.gabi, "Gabi")}
                 variant="outline"
                 className="w-full"
               >
@@ -148,9 +151,14 @@ export const SucessoStep = ({ onRestart }: SucessoStepProps) => {
           transition={{ delay: 0.6 }}
           className="p-4 rounded-xl bg-muted/30 border border-muted mb-6"
         >
-          <h4 className="font-medium text-foreground mb-2">📋 Próximos Passos:</h4>
+          <h4 className="font-medium text-foreground mb-2">
+            📋 Próximos Passos:
+          </h4>
           <ul className="text-sm text-muted-foreground text-left space-y-1">
-            <li>• Realize o pagamento via Pix ou entre em contato para outras formas</li>
+            <li>
+              • Realize o pagamento via Pix ou entre em contato para outras
+              formas
+            </li>
             <li>• Após o pagamento, envie o comprovante via WhatsApp</li>
             <li>• Aguarde a confirmação da organização</li>
             <li>• Prepare-se para um acampamento incrível! 🏕️</li>
@@ -164,16 +172,12 @@ export const SucessoStep = ({ onRestart }: SucessoStepProps) => {
           transition={{ delay: 0.7 }}
           className="flex flex-col sm:flex-row gap-4"
         >
-          <Button
-            onClick={onRestart}
-            variant="outline"
-            className="flex-1"
-          >
+          <Button onClick={onRestart} variant="outline" className="flex-1">
             Nova Inscrição
           </Button>
-          
+
           <Button
-            onClick={() => window.location.href = '/'}
+            onClick={() => (window.location.href = "/")}
             className="flex-1 bg-gradient-primary hover:shadow-glow"
           >
             <ExternalLink className="w-4 h-4 mr-2" />

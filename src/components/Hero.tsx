@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Calendar, MapPin, Users, Phone, MessageCircle } from 'lucide-react';
-import { EVENT_CONFIG, WHATSAPP_CONTACTS, BIBLE_VERSES } from '@/lib/constants';
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Calendar, MapPin, Users, Phone, MessageCircle } from "lucide-react";
+import { EVENT_CONFIG, WHATSAPP_CONTACTS, BIBLE_VERSES } from "@/lib/constants";
 
 interface HeroProps {
   onStartForm: () => void;
@@ -50,11 +50,11 @@ export const Hero = ({ onStartForm }: HeroProps) => {
           className="mb-8"
         >
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-tight">
-            <span className="bg-gradient-primary bg-clip-text text-transparent">
+            <span className="bg-gradient-primary bg-clip-text text-white">
               {EVENT_CONFIG.title}
             </span>
           </h1>
-          
+
           <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-4">
             {EVENT_CONFIG.subtitle}
           </p>
@@ -78,7 +78,7 @@ export const Hero = ({ onStartForm }: HeroProps) => {
               {EVENT_CONFIG.location}
             </p>
           </div>
-          
+
           <div className="bg-card border border-border rounded-2xl p-6 shadow-card">
             <Users className="w-8 h-8 text-primary mx-auto mb-4" />
             <h3 className="font-semibold text-foreground mb-2">Idade</h3>

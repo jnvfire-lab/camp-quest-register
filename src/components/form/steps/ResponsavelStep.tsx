@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { QuestionCard } from '../QuestionCard';
-import { TextInput } from '../inputs/TextInput';
-import { CheckboxInput } from '../inputs/CheckboxInput';
-import { FormData } from '@/lib/validation';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { QuestionCard } from "../QuestionCard";
+import { TextInput } from "../inputs/TextInput";
+import { CheckboxInput } from "../inputs/CheckboxInput";
+import { FormData } from "@/lib/validation";
 
 interface ResponsavelStepProps {
   data: Partial<FormData>;
@@ -20,12 +20,12 @@ export const ResponsavelStep = ({
   onNext,
   onPrevious,
   errors,
-  isRequired
+  isRequired,
 }: ResponsavelStepProps) => {
   const [localData, setLocalData] = useState({
-    responsavelNome: data.responsavelNome || '',
-    responsavelTelefone: data.responsavelTelefone || '',
-    autorizacao: data.autorizacao || false
+    responsavelNome: data.responsavelNome || "",
+    responsavelTelefone: data.responsavelTelefone || "",
+    autorizacao: data.autorizacao || false,
   });
 
   const handleChange = (field: string, value: any) => {
@@ -40,9 +40,9 @@ export const ResponsavelStep = ({
       return;
     }
 
-    const hasAllRequired = 
-      localData.responsavelNome.trim() && 
-      localData.responsavelTelefone.trim() && 
+    const hasAllRequired =
+      localData.responsavelNome.trim() &&
+      localData.responsavelTelefone.trim() &&
       localData.autorizacao;
 
     if (hasAllRequired && !Object.keys(errors).length) {
@@ -74,9 +74,9 @@ export const ResponsavelStep = ({
     );
   }
 
-  const canProceed = 
-    localData.responsavelNome.trim() && 
-    localData.responsavelTelefone.trim() && 
+  const canProceed =
+    localData.responsavelNome.trim() &&
+    localData.responsavelTelefone.trim() &&
     localData.autorizacao &&
     !Object.keys(errors).length;
 
@@ -95,9 +95,10 @@ export const ResponsavelStep = ({
           transition={{ delay: 0.1 }}
           className="p-4 rounded-xl bg-warning/10 border border-warning/20"
         >
-          <p className="text-sm text-warning-foreground">
-            ⚠️ <strong>Atenção:</strong> Para participar do acampamento sendo menor de idade, 
-            é obrigatório o preenchimento dos dados do responsável e sua autorização.
+          <p className="text-sm text-dark">
+            ⚠️ <strong>Atenção:</strong> Para participar do acampamento sendo
+            menor de idade, é obrigatório o preenchimento dos dados do
+            responsável e sua autorização.
           </p>
         </motion.div>
 
@@ -109,7 +110,7 @@ export const ResponsavelStep = ({
           <TextInput
             label="Nome do responsável"
             value={localData.responsavelNome}
-            onChange={(value) => handleChange('responsavelNome', value)}
+            onChange={(value) => handleChange("responsavelNome", value)}
             placeholder="Nome completo do responsável legal"
             error={errors.responsavelNome}
             required
@@ -126,7 +127,7 @@ export const ResponsavelStep = ({
             label="Telefone do responsável"
             type="tel"
             value={localData.responsavelTelefone}
-            onChange={(value) => handleChange('responsavelTelefone', value)}
+            onChange={(value) => handleChange("responsavelTelefone", value)}
             placeholder="(11) 91234-5678"
             mask="(99) 99999-9999"
             helpText="Telefone para contato em caso de emergência"
@@ -144,7 +145,7 @@ export const ResponsavelStep = ({
             label="Autorizo a participação no acampamento"
             description="Declaro estar ciente das atividades e autorizo a participação do menor no evento"
             checked={localData.autorizacao}
-            onChange={(checked) => handleChange('autorizacao', checked)}
+            onChange={(checked) => handleChange("autorizacao", checked)}
             error={errors.autorizacao}
             required
           />

@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { FORM_STEPS } from '@/lib/constants';
+import { motion } from "framer-motion";
+import { FORM_STEPS } from "@/lib/constants";
 
 interface ProgressBarProps {
   currentStep: number;
@@ -7,8 +7,12 @@ interface ProgressBarProps {
   currentStepName?: string;
 }
 
-export const ProgressBar = ({ currentStep, totalSteps, currentStepName }: ProgressBarProps) => {
-  const progress = (currentStep / totalSteps) * 100;
+export const ProgressBar = ({
+  currentStep,
+  totalSteps,
+  currentStepName,
+}: ProgressBarProps) => {
+  const progress = Math.min(100, ((currentStep + 1) / totalSteps) * 100);
 
   return (
     <div className="w-full mb-8">
@@ -21,11 +25,11 @@ export const ProgressBar = ({ currentStep, totalSteps, currentStepName }: Progre
           transition={{ duration: 0.5, ease: "easeOut" }}
         />
       </div>
-      
+
       {/* Step info */}
       <div className="flex justify-between items-center mt-4">
         <div className="text-sm text-muted-foreground">
-          Etapa {currentStep} de {totalSteps}
+          Etapa {currentStep + 1} de {totalSteps}
         </div>
         <div className="text-sm font-medium text-primary">
           {Math.round(progress)}% concluído
@@ -37,7 +41,7 @@ export const ProgressBar = ({ currentStep, totalSteps, currentStepName }: Progre
         {FORM_STEPS.map((step, index) => {
           const isCompleted = index < currentStep;
           const isCurrent = index === currentStep;
-          
+
           return (
             <div
               key={step.id}
@@ -46,24 +50,31 @@ export const ProgressBar = ({ currentStep, totalSteps, currentStepName }: Progre
               <motion.div
                 className={`
                   w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium mb-2
-                  ${isCompleted 
-                    ? 'bg-primary text-primary-foreground shadow-primary' 
-                    : isCurrent 
-                    ? 'bg-primary-light text-primary border-2 border-primary' 
-                    : 'bg-muted text-muted-foreground'
+                  ${
+                    isCompleted
+                      ? "bg-primary text-primary-foreground shadow-primary"
+                      : isCurrent
+                      ? "bg-primary-light text-primary border-2 border-primary"
+                      : "bg-muted text-muted-foreground"
                   }
                 `}
                 initial={{ scale: 0.8 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: index * 0.1 }}
               >
-                {isCompleted ? '✓' : index + 1}
+                {isCompleted ? "✓" : index + 1}
               </motion.div>
-              <span className={`
+              <span
+                className={`
                 text-xs max-w-[60px] leading-tight
-                ${isCurrent ? 'text-primary font-medium' : 'text-muted-foreground'}
-              `}>
-                {step.title.split(' ')[0]}
+                ${
+                  isCurrent
+                    ? "text-primary font-medium"
+                    : "text-muted-foreground"
+                }
+              `}
+              >
+                {step.title.split(" ")[0]}
               </span>
             </div>
           );

@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { QuestionCard } from '../QuestionCard';
-import { TextareaInput } from '../inputs/TextareaInput';
-import { FormData } from '@/lib/validation';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { QuestionCard } from "../QuestionCard";
+import { TextareaInput } from "../inputs/TextareaInput";
+import { FormData } from "@/lib/validation";
 
 interface ObservacoesStepProps {
   data: Partial<FormData>;
@@ -17,10 +17,10 @@ export const ObservacoesStep = ({
   onChange,
   onNext,
   onPrevious,
-  errors
+  errors,
 }: ObservacoesStepProps) => {
   const [localData, setLocalData] = useState({
-    observacoes: data.observacoes || ''
+    observacoes: data.observacoes || "",
   });
 
   const handleChange = (value: string) => {
@@ -83,19 +83,19 @@ export const ObservacoesStep = ({
           className="grid grid-cols-1 md:grid-cols-2 gap-4"
         >
           <div className="p-4 rounded-xl bg-success/10 border border-success/20">
-            <h4 className="font-medium text-success-foreground mb-2">✅ Incluir se tiver:</h4>
-            <ul className="text-xs text-success-foreground/80 space-y-1">
+            <h4 className="font-medium text-dark mb-2">✅ Incluir se tiver:</h4>
+            <ul className="text-xs text-dark/80 space-y-1">
               <li>• Alergias alimentares</li>
               <li>• Necessidades especiais</li>
               <li>• Medicamentos importantes</li>
             </ul>
           </div>
-          
+
           <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
-            <h4 className="font-medium text-primary-foreground/80 mb-2">💡 Dica:</h4>
-            <p className="text-xs text-primary-foreground/70">
-              Essas informações nos ajudam a preparar melhor as refeições 
-              e atividades para garantir que todos se divirtam com segurança!
+            <h4 className="font-medium text-dark/80 mb-2">💡 Dica:</h4>
+            <p className="text-xs text-dark/70">
+              Essas informações nos ajudam a preparar melhor as refeições e
+              atividades para garantir que todos se divirtam com segurança!
             </p>
           </div>
         </motion.div>
@@ -108,8 +108,8 @@ export const ObservacoesStep = ({
             className="p-4 rounded-xl bg-muted/50 border border-muted"
           >
             <p className="text-sm text-muted-foreground text-center">
-              Este campo é opcional. Se não há nada especial a informar, 
-              pode prosseguir para finalizar sua inscrição! 🎉
+              Este campo é opcional. Se não há nada especial a informar, pode
+              prosseguir para finalizar sua inscrição! 🎉
             </p>
           </motion.div>
         )}
