@@ -25,6 +25,10 @@ interface PagamentoStepProps {
   errors: Record<string, string>;
 }
 
+/** Tipos locais para evitar [field] como string solta */
+type PaymentField = "formaPagamento" | "valor" | "parcelas";
+type LocalState = Pick<FormData, PaymentField>;
+
 export const PagamentoStep = ({
   data,
   onChange,
@@ -33,16 +37,20 @@ export const PagamentoStep = ({
   errors,
 }: PagamentoStepProps) => {
   const { toast } = useToast();
-  const [localData, setLocalData] = useState({
-    formaPagamento: data.formaPagamento || "",
-    valor: EVENT_VALUE,
-    parcelas: data.parcelas || "1x",
+
+  const [localData, setLocalData] = useState<LocalState>({
+    formaPagamento: (data.formaPagamento || "") as LocalState["formaPagamento"],
+    valor: EVENT_VALUE as LocalState["valor"],
+    parcelas: (data.parcelas || "1x") as LocalState["parcelas"],
   });
 
-  const handleChange = (field: string, value: any) => {
-    const updates = { ...localData, [field]: value };
+  const handleChange = <K extends PaymentField>(
+    field: K,
+    value: LocalState[K]
+  ) => {
+    const updates = { ...localData, [field]: value } as LocalState;
     setLocalData(updates);
-    onChange(updates);
+    onChange(updates); // compatível com Partial<FormData>
   };
 
   const handleNext = () => {
@@ -103,7 +111,7 @@ export const PagamentoStep = ({
           transition={{ delay: 0.1 }}
           className="p-4 rounded-xl bg-warning/10 border border-warning/20"
         >
-          <p className="text-sm text-warning-foreground font-medium">
+          <p className="text-sm text-dark font-medium">
             ⏰ <strong>Prazo limite:</strong> Pagamento até{" "}
             {EVENT_CONFIG.paymentDeadline}
           </p>
@@ -206,8 +214,8 @@ export const PagamentoStep = ({
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-accent/30 border border-accent">
-              <p className="text-sm text-accent-foreground">
+            <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
+              <p className="text-sm text-primary">
                 📲 <strong>Após o pagamento:</strong> Envie o comprovante para
                 Maicon ou Gabi no WhatsApp.
               </p>
@@ -224,8 +232,9 @@ export const PagamentoStep = ({
           >
             <div className="p-4 rounded-xl bg-secondary/10 border border-secondary/20">
               <p className="text-sm text-dark mb-4">
-                💳 <strong>Pagamento no cartão:</strong> Entre em contato com a
-                organização para receber o link de pagamento.
+                💳 <strong>Pagamento no cartão:</strong> Os organizadores
+                entrarão em contato com você para combinar o pagamento com a
+                maquininha ou link de pagamento.
                 {showParcelas && localData.parcelas && (
                   <span className="block mt-2">
                     Parcelamento: <strong>{localData.parcelas}</strong> (sujeito

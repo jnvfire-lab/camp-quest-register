@@ -1,54 +1,97 @@
-import { Submission, DataAdapter } from '../types';
+import { Submission, DataAdapter } from "../types";
 
-// Mock adapter - logs data and returns success
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * MOCK: apenas loga e retorna ok.
+ */
 class MockAdapter implements DataAdapter {
   async save(submission: Submission): Promise<{ ok: boolean }> {
-    console.log('📝 Mock submission received:', submission);
-    
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
+    console.log("📝 [MOCK] submission:", submission);
+    await sleep(300);
     return { ok: true };
   }
 }
 
-// Google Apps Script adapter (TODO: implementation pending)
+/**
+ * Apps Script: envia para o Web App do Google Apps Script.
+ * - No DEV: usa o endpoint local `/api/submit` (proxy do Vite) ⇒ sem CORS.
+ * - Em PROD: usa a URL do GAS definida em VITE_APPS_SCRIPT_URL.
+ *   Se o servidor do GAS não devolver CORS, tentamos fallback `no-cors`.
+ */
 class AppsScriptAdapter implements DataAdapter {
   async save(submission: Submission): Promise<{ ok: boolean }> {
-    // TODO: Implement Google Apps Script integration
-    // const response = await fetch(process.env.APPS_SCRIPT_URL, {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(submission)
-    // });
-    // return { ok: response.ok };
-    
-    console.warn('⚠️ Apps Script adapter not implemented yet');
-    return { ok: false };
+    const APPS = import.meta.env.VITE_APPS_SCRIPT_URL as string | undefined;
+    const endpoint = import.meta.env.DEV ? "/api/submit" : APPS;
+
+    console.log(
+      "Adapter mode:",
+      import.meta.env.VITE_SHEETS_MODE || "apps_script",
+      "endpoint:",
+      endpoint
+    );
+
+    if (!endpoint) {
+      console.warn("⚠️ APPS_SCRIPT_URL ausente — fallback MOCK");
+      return { ok: true };
+    }
+
+    try {
+      // 1ª tentativa: requisição normal
+      const r = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(submission),
+      });
+
+      if (!r.ok) {
+        const txt = await r.text().catch(() => "");
+        throw new Error(`Apps Script HTTP ${r.status}: ${txt}`);
+      }
+
+      // Tenta ler JSON (quando há CORS adequado ou estamos via proxy)
+      try {
+        const data = await r.json();
+        return { ok: data?.ok ?? true };
+      } catch {
+        return { ok: true }; // sem JSON legível, mas HTTP ok
+      }
+    } catch (err) {
+      // DEV não deve cair aqui pois o proxy do Vite resolve CORS.
+      // Em PROD, se o GAS bloquear CORS, tenta `no-cors`.
+      if (!import.meta.env.DEV) {
+        console.warn("CORS bloqueou leitura; tentando com no-cors…", err);
+        await fetch(endpoint, {
+          method: "POST",
+          mode: "no-cors",
+          body: JSON.stringify(submission),
+        });
+        return { ok: true };
+      }
+      throw err;
+    }
   }
 }
 
-// Google Sheets API adapter (TODO: implementation pending)
+/**
+ * Sheets API (service account) — não usado neste modo.
+ */
 class SheetsApiAdapter implements DataAdapter {
-  async save(submission: Submission): Promise<{ ok: boolean }> {
-    // TODO: Implement Google Sheets API integration using googleapis
-    // This would use GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY, etc.
-    
-    console.warn('⚠️ Sheets API adapter not implemented yet');
+  async save(): Promise<{ ok: boolean }> {
+    console.warn("⚠️ Sheets API adapter não implementado neste projeto");
     return { ok: false };
   }
 }
 
-// Factory function to get the appropriate adapter
+/** Factory */
 export const getDataAdapter = (): DataAdapter => {
-  const mode = import.meta.env.VITE_SHEETS_MODE || 'mock';
-  
+  const mode = (import.meta.env.VITE_SHEETS_MODE as string) || "apps_script";
   switch (mode) {
-    case 'apps_script':
+    case "apps_script":
       return new AppsScriptAdapter();
-    case 'sheets_api':
+    case "sheets_api":
       return new SheetsApiAdapter();
-    case 'mock':
+    case "mock":
     default:
       return new MockAdapter();
   }
