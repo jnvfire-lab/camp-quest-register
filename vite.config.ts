@@ -4,11 +4,9 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 export default defineConfig(({ mode }) => {
-  // lê variáveis do .env.local
   const env = loadEnv(mode, process.cwd(), "");
-  const apps = env.VITE_APPS_SCRIPT_URL; // URL /exec do Apps Script
+  const apps = env.VITE_APPS_SCRIPT_URL; // defina no .env.local para dev
 
-  // Proxy no dev: /api/submit -> https://script.google.com/.../exec
   let proxy: any = undefined;
   if (apps) {
     const u = new URL(apps);
@@ -17,8 +15,7 @@ export default defineConfig(({ mode }) => {
         target: `${u.protocol}//${u.host}`,
         changeOrigin: true,
         secure: true,
-        // mapeia SEMPRE para o caminho do GAS (ignora o path local)
-        rewrite: () => u.pathname + (u.search || ""),
+        rewrite: () => u.pathname + (u.search || ""), // força o path do GAS
       },
     };
   }
@@ -27,7 +24,7 @@ export default defineConfig(({ mode }) => {
     server: {
       host: "::",
       port: 8080,
-      proxy, // habilita o proxy no dev
+      proxy, // no dev, /api/submit -> Apps Script
     },
     plugins: [react(), mode === "development" && componentTagger()].filter(
       Boolean
@@ -36,6 +33,9 @@ export default defineConfig(({ mode }) => {
       alias: {
         "@": path.resolve(__dirname, "./src"),
       },
+    },
+    build: {
+      outDir: "dist", // garante que o Vite gere em dist (esperado pelo Cloudflare)
     },
   };
 });
