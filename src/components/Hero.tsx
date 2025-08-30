@@ -84,6 +84,12 @@ export const Hero = ({ onStartForm }: HeroProps) => {
             <h3 className="font-semibold text-foreground mb-2">Idade</h3>
             <p className="text-muted-foreground">{EVENT_CONFIG.ageLimit}</p>
           </div>
+
+          <div className="bg-card border border-border rounded-2xl p-6 shadow-card">
+            <Users className="w-8 h-8 text-primary mx-auto mb-4" />
+            <h3 className="font-semibold text-foreground mb-2">Quando?</h3>
+            <p className="text-muted-foreground">{EVENT_CONFIG.dateEvent}</p>
+          </div>
         </motion.div>
 
         {/* Versículos */}
