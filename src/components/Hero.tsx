@@ -64,6 +64,28 @@ export const Hero = ({ onStartForm }: HeroProps) => {
           </p>
         </motion.div>
 
+        {/* CTA Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.5 }}
+        >
+          <Button
+            onClick={onStartForm}
+            size="lg"
+            className="bg-gradient-primary hover:shadow-glow text-lg px-8 py-6 h-auto transition-bounce"
+          >
+            Fazer Inscrição Agora
+            <motion.div
+              animate={{ x: [0, 4, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+              className="ml-2"
+            >
+              →
+            </motion.div>
+          </Button>
+        </motion.div>
+
         {/* Event Details */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -114,28 +136,6 @@ export const Hero = ({ onStartForm }: HeroProps) => {
               </div>
             ))}
           </div>
-        </motion.div>
-
-        {/* CTA Button */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.5 }}
-        >
-          <Button
-            onClick={onStartForm}
-            size="lg"
-            className="bg-gradient-primary hover:shadow-glow text-lg px-8 py-6 h-auto transition-bounce"
-          >
-            Fazer Inscrição Agora
-            <motion.div
-              animate={{ x: [0, 4, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="ml-2"
-            >
-              →
-            </motion.div>
-          </Button>
         </motion.div>
       </div>
     </section>
